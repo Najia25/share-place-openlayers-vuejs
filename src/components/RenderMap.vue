@@ -31,7 +31,6 @@ export default {
       const long = +data.coordinates.long.toFixed(2);
       const lat = +data.coordinates.lat.toFixed(2);
       /* eslint-disable no-debugger */
-      debugger;
 
       const iconGeometry = new Point(fromLonLat([long, lat]));
 

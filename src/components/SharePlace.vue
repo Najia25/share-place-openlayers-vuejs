@@ -4,15 +4,33 @@
       id="share-link"
       type="text"
       readonly
-      value="Select a place to get a sharable link."
+      v-model="sharableLink"
     />
-    <button id="share-btn" disabled>Share Place</button>
+    <button id="share-btn" :disabled="disabled">Share Place</button>
   </section>
 </template>
 
 <script>
 export default {
-  name: "share-place"
+  name: "share-place",
+  created() {
+    /* eslint-disable no-undef */
+    eventBus.$on("gotAddressAndCoords", data => this.createSharableLink(data));
+  },
+  data () {
+    return {
+      sharableLink: "Select a place to get a sharable link.",
+      disabled: true
+    }
+  },
+  methods: {
+    createSharableLink (data) {
+      const long = +data.coordinates.long.toFixed(2);
+      const lat = +data.coordinates.lat.toFixed(2);
+      this.disabled = false;
+      this.sharableLink = `${location.origin}/my-place?address=${encodeURI(data.address)}&lat=${lat}&long=${long}`;
+    }
+  }
 };
 </script>
 
