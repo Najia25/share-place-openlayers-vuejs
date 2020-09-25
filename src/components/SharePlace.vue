@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  export default {
-    name: "share-place"
-  }
+export default {
+  name: "share-place"
+};
 </script>
 
 <style lang="scss">

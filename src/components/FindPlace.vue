@@ -5,14 +5,57 @@
       <input type="text" />
       <button type="submit">Find Place</button>
     </form>
-    <button id="locate-btn">Get Current Location</button>
+    <button id="locate-btn" @click="locareUserHandler">
+      Get Current Location
+    </button>
+    <modal v-if="loading"></modal>
   </section>
 </template>
 
 <script>
-  export default {
-    name: "find-place"
+import { getAddressFromCoords } from "@/utility/Location";
+
+export default {
+  name: "find-place",
+  components: {
+    Modal: () => import("@/components/Modal")
+  },
+  data() {
+    return {
+      loading: false
+    };
+  },
+  methods: {
+    locareUserHandler() {
+      if (!navigator.geolocation) {
+        alert("Sorry! location feature is not available in your browser!");
+        return;
+      }
+      this.loading = true;
+      navigator.geolocation.getCurrentPosition(
+        async result => {
+          const coordinates = {
+            lat: result.coords.latitude,
+            long: result.coords.longitude
+          };
+          console.log(coordinates);
+          const address = await getAddressFromCoords(coordinates);
+          this.loading = false;
+          // this.selectPlace(coordinates, address);
+          /* eslint-disable no-undef */
+          eventBus.$emit("gotAddressAndCoords", {
+            coordinates,
+            address
+          });
+        },
+        () => {
+          this.loading = false;
+          console.log("Could not locate you! please enter address manually");
+        }
+      );
+    }
   }
+};
 </script>
 
 <style lang="scss" scoped>
