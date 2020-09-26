@@ -2,7 +2,7 @@
   <section id="place-data">
     <form v-on:submit.prevent>
       <label for="address">Address</label>
-      <input type="text" v-model="address"/>
+      <input type="text" v-model="address" />
       <button type="submit" @click="findAddressHandler">Find Place</button>
     </form>
     <button id="locate-btn" @click="locareUserHandler">
@@ -23,8 +23,8 @@ export default {
   data() {
     return {
       loading: false,
-      address: ''
-    }
+      address: ""
+    };
   },
   methods: {
     locareUserHandler() {
@@ -55,9 +55,9 @@ export default {
         }
       );
     },
-    async findAddressHandler () {
-      if (!this.address || this,this.address.trim().length === 0) {
-        alert('Invalid address enetred - please try again!');
+    async findAddressHandler() {
+      if ((!this.address || this, this.address.trim().length === 0)) {
+        alert("Invalid address enetred - please try again!");
         return;
       }
       this.loading = true;
@@ -72,12 +72,12 @@ export default {
         });
       } catch (err) {
         this.loading = false;
-        alert('Could not find the location! Please type in a valid address');
+        alert("Could not find the location! Please type in a valid address");
       }
       this.loading = false;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

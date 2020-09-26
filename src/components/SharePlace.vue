@@ -1,12 +1,9 @@
 <template>
   <section id="share-controls">
-    <input
-      id="share-link"
-      type="text"
-      readonly
-      v-model="sharableLink"
-    />
-    <button id="share-btn" :disabled="disabled">Share Place</button>
+    <input id="share-link" type="text" readonly v-model="sharableLink" />
+    <button id="share-btn" :disabled="disabled" @click="sharePlaceHandler">
+      Share Place
+    </button>
   </section>
 </template>
 
@@ -17,18 +14,34 @@ export default {
     /* eslint-disable no-undef */
     eventBus.$on("gotAddressAndCoords", data => this.createSharableLink(data));
   },
-  data () {
+  data() {
     return {
       sharableLink: "Select a place to get a sharable link.",
       disabled: true
-    }
+    };
   },
   methods: {
-    createSharableLink (data) {
+    createSharableLink(data) {
       const long = +data.coordinates.long.toFixed(2);
       const lat = +data.coordinates.lat.toFixed(2);
       this.disabled = false;
-      this.sharableLink = `${location.origin}/my-place?address=${encodeURI(data.address)}&lat=${lat}&long=${long}`;
+      this.sharableLink = `${location.origin}/my-place/address/${encodeURI(
+        data.address
+      )}/lat/${lat}/long/${long}`;
+    },
+    async sharePlaceHandler() {
+      const sharedLinkInputElement = document.getElementById("share-link");
+      if (!navigator.clipboard) {
+        sharedLinkInputElement.select();
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(this.sharableLink);
+        alert("Link copied to clipboard!");
+      } catch (err) {
+        console.log(err);
+        sharedLinkInputElement.select();
+      }
     }
   }
 };

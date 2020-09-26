@@ -22,14 +22,21 @@ export default {
       map: null
     };
   },
+  props: ["mapData"],
   created() {
     /* eslint-disable no-undef */
     eventBus.$on("gotAddressAndCoords", data => this.renderMap(data));
   },
+  mounted() {
+    if (this.mapData) {
+      this.renderMap(this.mapData);
+    }
+  },
   methods: {
     renderMap(data) {
-      const long = +data.coordinates.long.toFixed(2);
-      const lat = +data.coordinates.lat.toFixed(2);
+      console.log(typeof data.coordinates.long);
+      const long = parseFloat(data.coordinates.long).toFixed(2);
+      const lat = parseFloat(data.coordinates.lat).toFixed(2);
       /* eslint-disable no-debugger */
 
       const iconGeometry = new Point(fromLonLat([long, lat]));
